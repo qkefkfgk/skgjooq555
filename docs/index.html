@@ -1,5 +1,4 @@
-
-<!DOCTYPE html>
+<html><head><base href="https://websim.host"></head><!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -86,6 +85,7 @@
             padding: 15px;
             text-align: center;
             transition: transform 0.3s ease;
+            cursor: pointer;
         }
         .product:active {
             transform: scale(0.98);
@@ -132,10 +132,96 @@
         .footer .icon:active {
             color: #3498db;
         }
+        .product-detail {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #f0f2f5;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .product-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .product-description {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            max-height: 3.2em;
+        }
+        .product-description.expanded {
+            max-height: 1000px;
+        }
+        .read-more {
+            color: #007bff;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+        .products-table th, .products-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .products-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        .products-table tr:last-child td {
+            border-bottom: none;
+        }
+        .buy-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .buy-button:hover {
+            background-color: #0056b3;
+        }
+        .back-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 15px;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="mainContainer">
         <div class="header">
             <h1>МАГАЗИН НАХОДОК</h1>
             <div class="rating">
@@ -167,6 +253,32 @@
         </div>
     </div>
 
+    <div class="product-detail" id="productDetail">
+        <button class="back-button" onclick="closeProductDetail()">Назад</button>
+        <img src="" alt="Фото товара" class="product-image" id="detailImage">
+        <div class="product-title" id="detailName"></div>
+        <div class="product-description" id="productDescription">
+            <span id="shortDescription"></span>
+            <span class="hidden-description" id="fullDescription" style="display: none;"></span>
+        </div>
+        <div class="read-more" id="readMoreBtn">Читать полностью</div>
+
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>Локация</th>
+                    <th>Вес / кол-во</th>
+                    <th>Тип клада</th>
+                    <th>Цена</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="productOptions">
+                <!-- Product options will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
     <div class="footer">
         <div class="icon" id="cartIcon"><i class="fas fa-shopping-cart"></i></div>
         <div class="icon" id="profileIcon"><i class="fas fa-user"></i></div>
@@ -175,12 +287,12 @@
 
     <script>
         const products = [
-            { name: "Смартфон X1000", price: 29999, category: "electronics", image: "https://websim.host/phone.svg", unit: "шт" },
-            { name: "Стильная куртка", price: 5999, category: "clothing", image: "https://websim.host/jacket.svg", unit: "шт" },
-            { name: "Умная колонка", price: 7999, category: "electronics", image: "https://websim.host/speaker.svg", unit: "шт" },
-            { name: "Кухонный комбайн", price: 12999, category: "home", image: "https://websim.host/mixer.svg", unit: "шт" },
-            { name: "Бестселлер года", price: 799, category: "books", image: "https://websim.host/book.svg", unit: "шт" },
-            { name: "Беспроводные наушники", price: 4999, category: "electronics", image: "https://websim.host/headphones.svg", unit: "шт" }
+            { id: 1, name: "Смартфон X1000", price: 29999, category: "electronics", image: "https://websim.host/phone.svg", unit: "шт", description: "Новейший смартфон с передовыми технологиями. Оснащен мощным процессором, высококачественной камерой и длительным временем работы от батареи." },
+            { id: 2, name: "Стильная куртка", price: 5999, category: "clothing", image: "https://websim.host/jacket.svg", unit: "шт", description: "Модная куртка из высококачественных материалов. Идеально подходит для прохладной погоды, имеет стильный дизайн и множество функциональных карманов." },
+            { id: 3, name: "Умная колонка", price: 7999, category: "electronics", image: "https://websim.host/speaker.svg", unit: "шт", description: "Интеллектуальная колонка с голосовым помощником. Воспроизводит музыку, отвечает на вопросы и управляет умным домом." },
+            { id: 4, name: "Кухонный комбайн", price: 12999, category: "home", image: "https://websim.host/mixer.svg", unit: "шт", description: "Многофункциональный кухонный комбайн для приготовления разнообразных блюд. Имеет множество насадок и режимов работы." },
+            { id: 5, name: "Бестселлер года", price: 799, category: "books", image: "https://websim.host/book.svg", unit: "шт", description: "Популярная книга, ставшая бестселлером этого года. Увлекательный сюжет и глубокие персонажи не оставят равнодушным ни одного читателя." },
+            { id: 6, name: "Беспроводные наушники", price: 4999, category: "electronics", image: "https://websim.host/headphones.svg", unit: "шт", description: "Высококачественные беспроводные наушники с активным шумоподавлением. Обеспечивают чистый звук и комфортное ношение в течение длительного времени." }
         ];
 
         function displayProducts(filteredProducts = products) {
@@ -196,6 +308,7 @@
                     <div class="price">${product.price} ₽</div>
                     <div class="price-per-unit">${product.price} ₽ / ${product.unit}</div>
                 `;
+                productElement.addEventListener('click', () => showProductDetail(product));
                 productList.appendChild(productElement);
             });
         }
@@ -208,6 +321,37 @@
             displayProducts(filteredProducts);
         }
 
+        function showProductDetail(product) {
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('productDetail').style.display = 'block';
+            
+            document.getElementById('detailImage').src = product.image;
+            document.getElementById('detailName').textContent = product.name;
+            
+            const shortDesc = product.description.split('. ')[0] + '.';
+            document.getElementById('shortDescription').textContent = shortDesc;
+            document.getElementById('fullDescription').textContent = product.description.substring(shortDesc.length);
+
+            const productOptions = document.getElementById('productOptions');
+            productOptions.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>Москва</td>
+                    <td>2 шт</td>
+                    <td>Пункт выдачи</td>
+                    <td>${product.price} ₽</td>
+                    <td><button class="buy-button">Купить</button></td>
+                `;
+                productOptions.appendChild(tr);
+            }
+        }
+
+        function closeProductDetail() {
+            document.getElementById('mainContainer').style.display = 'block';
+            document.getElementById('productDetail').style.display = 'none';
+        }
+
         document.getElementById('productFilter').addEventListener('change', filterProducts);
 
         // Initialize with all products
@@ -217,6 +361,24 @@
         document.getElementById('cartIcon').addEventListener('click', () => alert('Корзина пока пуста'));
         document.getElementById('profileIcon').addEventListener('click', () => alert('Профиль пользователя'));
         document.getElementById('chatIcon').addEventListener('click', () => alert('Чат поддержки'));
+
+        // Read More functionality
+        const descriptionEl = document.getElementById('productDescription');
+        const readMoreBtn = document.getElementById('readMoreBtn');
+        const fullDescription = document.getElementById('fullDescription');
+
+        readMoreBtn.addEventListener('click', () => {
+            if (descriptionEl.classList.contains('expanded')) {
+                descriptionEl.classList.remove('expanded');
+                fullDescription.style.display = 'none';
+                readMoreBtn.textContent = 'Читать полностью';
+            } else {
+                descriptionEl.classList.add('expanded');
+                fullDescription.style.display = 'inline';
+                readMoreBtn.textContent = 'Свернуть';
+            }
+        });
     </script>
 </body>
+</html>
 </html>
