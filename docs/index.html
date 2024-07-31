@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Онлайн Магазин - Мобильная Версия</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0 0 70px 0;
+            color: #333;
+            line-height: 1.6;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .container {
+            max-width: 100%;
+            padding: 10px;
+        }
+        .header {
+            background-color: #ffffff;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin: 0;
+        }
+        .rating {
+            font-size: 1em;
+            color: #ffc107;
+            margin: 5px 0;
+        }
+        .sales {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+        .filters {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            font-size: 16px;
+            background-color: #fff;
+            width: 100%;
+            margin-bottom: 10px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+            background-size: 12px auto;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .product {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .product:active {
+            transform: scale(0.98);
+        }
+        .product img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .product .name {
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .product .price {
+            font-size: 1em;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        .product .price-per-unit {
+            font-size: 0.8em;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+        .footer {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .footer .icon {
+            font-size: 1.3em;
+            color: #333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .footer .icon:active {
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>МАГАЗИН НАХОДОК</h1>
+            <div class="rating">
+                <span>4.99</span>
+                <span>★★★★★</span>
+            </div>
+            <div class="sales">ПРОДАЖ: 12483</div>
+        </div>
+
+        <div class="filters">
+            <select id="cityFilter">
+                <option value="">Выберите город</option>
+                <option value="moscow">Москва</option>
+                <option value="stpetersburg">Санкт-Петербург</option>
+                <option value="novosibirsk">Новосибирск</option>
+                <option value="yekaterinburg">Екатеринбург</option>
+            </select>
+            <select id="productFilter">
+                <option value="">Выберите категорию</option>
+                <option value="electronics">Электроника</option>
+                <option value="clothing">Одежда</option>
+                <option value="home">Товары для дома</option>
+                <option value="books">Книги</option>
+            </select>
+        </div>
+
+        <div class="products" id="productList">
+            <!-- Products will be dynamically added here -->
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="icon" id="cartIcon"><i class="fas fa-shopping-cart"></i></div>
+        <div class="icon" id="profileIcon"><i class="fas fa-user"></i></div>
+        <div class="icon" id="chatIcon"><i class="fas fa-comments"></i></div>
+    </div>
+
+    <script>
+        const products = [
+            { name: "Смартфон X1000", price: 29999, category: "electronics", image: "https://websim.host/phone.svg", unit: "шт" },
+            { name: "Стильная куртка", price: 5999, category: "clothing", image: "https://websim.host/jacket.svg", unit: "шт" },
+            { name: "Умная колонка", price: 7999, category: "electronics", image: "https://websim.host/speaker.svg", unit: "шт" },
+            { name: "Кухонный комбайн", price: 12999, category: "home", image: "https://websim.host/mixer.svg", unit: "шт" },
+            { name: "Бестселлер года", price: 799, category: "books", image: "https://websim.host/book.svg", unit: "шт" },
+            { name: "Беспроводные наушники", price: 4999, category: "electronics", image: "https://websim.host/headphones.svg", unit: "шт" }
+        ];
+
+        function displayProducts(filteredProducts = products) {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = '';
+
+            filteredProducts.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'product';
+                productElement.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" width="100" height="100">
+                    <div class="name">${product.name}</div>
+                    <div class="price">${product.price} ₽</div>
+                    <div class="price-per-unit">${product.price} ₽ / ${product.unit}</div>
+                `;
+                productList.appendChild(productElement);
+            });
+        }
+
+        function filterProducts() {
+            const category = document.getElementById('productFilter').value;
+            const filteredProducts = category
+                ? products.filter(product => product.category === category)
+                : products;
+            displayProducts(filteredProducts);
+        }
+
+        document.getElementById('productFilter').addEventListener('change', filterProducts);
+
+        // Initialize with all products
+        displayProducts();
+
+        // Footer icon interactions
+        document.getElementById('cartIcon').addEventListener('click', () => alert('Корзина пока пуста'));
+        document.getElementById('profileIcon').addEventListener('click', () => alert('Профиль пользователя'));
+        document.getElementById('chatIcon').addEventListener('click', () => alert('Чат поддержки'));
+    </script>
+</body>
+</html>
