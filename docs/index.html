@@ -1,4 +1,4 @@
-<html><head><base href="https://qkefkfgk.github.io/999999qwfqgwqwg/"></head><body><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -421,12 +421,12 @@
 
     <div class="product-detail" id="productDetail">
         <button class="back-button" onclick="closeProductDetail()">Назад</button>
-        <img src="" alt="Фото товара" class="product-image" id="detailImage" onload="imageLoaded(this)" onerror="this.onerror=null; this.src='https://via.placeholder.com/180x180?text=Нет+фото';">
+        <img src="" alt="Фото товара" class="product-image" id="detailImage">
         <div class="product-title" id="detailName"></div>
         <div class="product-description" id="shortDescription"></div>
         <button class="more-button" onclick="toggleProductDetails()">Подробнее</button>
         <div class="product-details" id="productDetails">
-            <img src="" alt="Подробное фото товара" class="product-image" id="detailMaxImage" onload="imageLoaded(this)" onerror="this.onerror=null; this.src='https://via.placeholder.com/180x180?text=Нет+подробного+фото';">
+            <img src="" alt="Подробное фото товара" class="product-image" id="detailMaxImage">
             <div id="fullDescription"></div>
         </div>
 
@@ -448,7 +448,7 @@
     <div class="order-confirmation" id="orderConfirmation">
         <h1>Подтверждение заказа</h1>
         <div class="order-item">
-            <img src="" alt="Фото товара" id="confirmationImage" onload="imageLoaded(this)" onerror="this.onerror=null; this.src='https://via.placeholder.com/150x150?text=Нет+фото';">
+            <img src="" alt="Фото товара" id="confirmationImage">
             <h2 id="confirmationName"></h2>
             <div class="order-details">
                 <p><strong>Локация:</strong> <span id="confirmationLocation"></span></p>
@@ -514,11 +514,19 @@
 
         let allProducts = [];
 
-        function displayProducts(products) {
+        function checkImage(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(url);
+                img.onerror = () => resolve('https://via.placeholder.com/100x100?text=Нет+фото');
+                img.src = url;
+            });
+        }
+
+        async function displayProducts(products) {
             const productList = document.getElementById('productList');
             productList.innerHTML = '';
 
-            // Group products by type and find the cheapest for each type
             const cheapestProducts = products.reduce((acc, product) => {
                 if (!acc[product.Product] || parseFloat(product.Price) < parseFloat(acc[product.Product].Price)) {
                     acc[product.Product] = product;
@@ -526,11 +534,12 @@
                 return acc;
             }, {});
 
-            Object.values(cheapestProducts).forEach(product => {
+            for (const product of Object.values(cheapestProducts)) {
+                const imageUrl = await checkImage(product.Photo);
                 const productElement = document.createElement('div');
                 productElement.className = 'product';
                 productElement.innerHTML = `
-                    <img src="${product.Photo}?timestamp=${Date.now()}" alt="${product.Product}" onload="imageLoaded(this)" onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100?text=Нет+фото';">
+                    <img src="${imageUrl}" alt="${product.Product}" onload="imageLoaded(this)">
                     <div class="name">${product.Product}</div>
                     <div class="price-button">
                         <span class="promotional-price">${product["Promotional.price"]} ₽</span>
@@ -540,27 +549,29 @@
                 `;
                 productElement.addEventListener('click', () => showProductDetail(product));
                 productList.appendChild(productElement);
-            });
+            }
         }
 
-        function showProductDetail(product) {
+        async function showProductDetail(product) {
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('productDetail').style.display = 'block';
             
-            document.getElementById('detailImage').src = `${product.Photo}?timestamp=${Date.now()}`;
+            const detailImageUrl = await checkImage(product.Photo);
+            const detailMaxImageUrl = await checkImage(product["Max.Photo"]);
+            
+            document.getElementById('detailImage').src = detailImageUrl;
             document.getElementById('detailName').textContent = product.Product;
             document.getElementById('shortDescription').textContent = product.Description;
             
-            document.getElementById('detailMaxImage').src = `${product["Max.Photo"]}?timestamp=${Date.now()}`;
+            document.getElementById('detailMaxImage').src = detailMaxImageUrl;
             document.getElementById('fullDescription').textContent = product["Max.Description"];
 
             const productOptions = document.getElementById('productOptions');
             productOptions.innerHTML = '';
 
-            // Find all products of the same type in the selected city
             const sameTypeProducts = allProducts.filter(p => p.Product === product.Product && p.City === product.City);
 
-            sameTypeProducts.forEach(p => {
+            for (const p of sameTypeProducts) {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td><strong>${p.City}</strong> / ${p.District}<br><span style="font-size: 0.8em; color: #6c757d;">${p.Note}</span></td>
@@ -573,17 +584,17 @@
                     </td>
                 `;
                 productOptions.appendChild(tr);
-            });
+            }
 
-            // Hide product details initially
             document.getElementById('productDetails').style.display = 'none';
         }
 
-        function showOrderConfirmation(product, price, city, district, weight, type, photo) {
+        async function showOrderConfirmation(product, price, city, district, weight, type, photo) {
             document.getElementById('productDetail').style.display = 'none';
             document.getElementById('orderConfirmation').style.display = 'block';
 
-            document.getElementById('confirmationImage').src = `${photo}?timestamp=${Date.now()}`;
+            const imageUrl = await checkImage(photo);
+            document.getElementById('confirmationImage').src = imageUrl;
             document.getElementById('confirmationName').textContent = product;
             document.getElementById('confirmationLocation').textContent = `${city} / ${district}`;
             document.getElementById('confirmationWeight').textContent = weight;
@@ -682,7 +693,6 @@
             .then(response => response.json())
             .then(data => {
                 allProducts = data;
-                // Don't display products initially
                 document.getElementById('productList').innerHTML = '<p>Пожалуйста, выберите город для просмотра товаров.</p>';
             })
             .catch(error => {
