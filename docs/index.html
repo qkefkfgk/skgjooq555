@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<html><head><base href="https://qkefkfgk.github.io/999999qwfqgwqwg/"></head><body><!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,6 @@
     <title>Онлайн Магазин - Мобильная Версия</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <base href="https://qkefkfgk.github.io/999999qwfqgwqwg/data.json">
     <style>
         * {
             box-sizing: border-box;
@@ -531,7 +530,7 @@
                 const productElement = document.createElement('div');
                 productElement.className = 'product';
                 productElement.innerHTML = `
-                    <img src="${product.Photo}" alt="${product.Product}" onload="imageLoaded(this)" onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100?text=Нет+фото';">
+                    <img src="${product.Photo}?timestamp=${Date.now()}" alt="${product.Product}" onload="imageLoaded(this)" onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100?text=Нет+фото';">
                     <div class="name">${product.Product}</div>
                     <div class="price-button">
                         <span class="promotional-price">${product["Promotional.price"]} ₽</span>
@@ -548,11 +547,11 @@
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('productDetail').style.display = 'block';
             
-            document.getElementById('detailImage').src = product.Photo;
+            document.getElementById('detailImage').src = `${product.Photo}?timestamp=${Date.now()}`;
             document.getElementById('detailName').textContent = product.Product;
             document.getElementById('shortDescription').textContent = product.Description;
             
-            document.getElementById('detailMaxImage').src = product["Max.Photo"];
+            document.getElementById('detailMaxImage').src = `${product["Max.Photo"]}?timestamp=${Date.now()}`;
             document.getElementById('fullDescription').textContent = product["Max.Description"];
 
             const productOptions = document.getElementById('productOptions');
@@ -584,7 +583,7 @@
             document.getElementById('productDetail').style.display = 'none';
             document.getElementById('orderConfirmation').style.display = 'block';
 
-            document.getElementById('confirmationImage').src = photo;
+            document.getElementById('confirmationImage').src = `${photo}?timestamp=${Date.now()}`;
             document.getElementById('confirmationName').textContent = product;
             document.getElementById('confirmationLocation').textContent = `${city} / ${district}`;
             document.getElementById('confirmationWeight').textContent = weight;
@@ -675,7 +674,6 @@
         }
 
         function imageLoaded(img) {
-            // Действия по загрузке изображения
             console.log('Image loaded:', img.src);
         }
 
@@ -687,7 +685,10 @@
                 // Don't display products initially
                 document.getElementById('productList').innerHTML = '<p>Пожалуйста, выберите город для просмотра товаров.</p>';
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                showError("Ошибка загрузки данных. Пожалуйста, попробуйте позже.");
+            });
 
         initCityDropdown();
 
