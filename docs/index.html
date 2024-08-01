@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <base href="https://qkefkfgk.github.io/999999qwfqgwqwg/">
+    <base href="https://qkefkfgk.github.io/999999qwfqgwqwg/data.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Онлайн Магазин - Мобильная Версия</title>
@@ -390,6 +390,19 @@
         .error-message i {
             margin-right: 10px;
         }
+        .select-city-message {
+            background-color: #ffffff;
+            color: #333333;
+            padding: 10px;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+        }
     </style>
 </head>
 <body>
@@ -412,6 +425,10 @@
                     <input type="text" class="city-search" id="citySearch" placeholder="Поиск города">
                     <div id="cityItems"></div>
                 </div>
+            </div>
+            <div class="select-city-message">
+                <i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i>
+                Пожалуйста, выберите город для просмотра товаров
             </div>
         </div>
 
@@ -517,10 +534,14 @@
 
         function checkImage(url) {
             return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve(url);
-                img.onerror = () => resolve('https://via.placeholder.com/100x100?text=Нет+фото');
-                img.src = url;
+                if (url.startsWith('https://gekkk.co/storage')) {
+                    resolve(url);
+                } else {
+                    const img = new Image();
+                    img.onload = () => resolve(url);
+                    img.onerror = () => resolve('https://via.placeholder.com/100x100?text=Нет+фото');
+                    img.src = url;
+                }
             });
         }
 
@@ -540,7 +561,7 @@
                 const productElement = document.createElement('div');
                 productElement.className = 'product';
                 productElement.innerHTML = `
-                    <img src="${imageUrl}" alt="${product.Product}" onload="imageLoaded(this)">
+                    <img src="${imageUrl}" alt="${product.Product}" loading="lazy">
                     <div class="name">${product.Product}</div>
                     <div class="price-button">
                         <span class="promotional-price">${product["Promotional.price"]} ₽</span>
@@ -665,6 +686,7 @@
         function filterProductsByCity(city) {
             const filteredProducts = allProducts.filter(product => product.City === city);
             displayProducts(filteredProducts);
+            document.querySelector('.select-city-message').style.display = 'none';
         }
 
         function confirmOrder() {
@@ -685,16 +707,11 @@
             }, 3000);
         }
 
-        function imageLoaded(img) {
-            console.log('Image loaded:', img.src);
-        }
-
         // Fetch products from JSON file
         fetch('https://qkefkfgk.github.io/999999qwfqgwqwg/data.json')
             .then(response => response.json())
             .then(data => {
                 allProducts = data;
-                document.getElementById('productList').innerHTML = '<p>Пожалуйста, выберите город для просмотра товаров.</p>';
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -714,4 +731,3 @@
     </script>
 </body>
 </html>
-</body></html>
