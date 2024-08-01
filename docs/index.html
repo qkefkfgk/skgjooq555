@@ -410,8 +410,7 @@
                     <div class="name">${product.Product}</div>
                     <div class="price-button">
                         <span class="promotional-price">${product["Promotional.price"]} ₽</span>
-                        <span class="original-price">${product.Price} ₽</span>
-                        <span class="price-per-unit">от ${product.Price} ₽ / ${product.Weight}</span>
+                        <span class="original-price">от ${product.Price} ₽ / ${product.Weight}</span>
                     </div>
                 `;
                 productElement.addEventListener('click', () => showProductDetail(product));
