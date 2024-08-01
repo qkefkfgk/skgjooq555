@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -256,13 +257,13 @@
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 6px 10px;
+            border-radius: 20px;
             cursor: pointer;
             transition: background-color 0.3s;
-            font-size: 0.9em;
+            font-size: 0.8em;
+            margin-top: 5px;
             width: 100%;
-            margin-top: 10px;
         }
         .buy-button:hover {
             background-color: #0056b3;
@@ -348,7 +349,6 @@
                     <th>Вес / кол-во</th>
                     <th>Тип клада</th>
                     <th>Цена</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody id="productOptions">
@@ -407,7 +407,7 @@
                 const productElement = document.createElement('div');
                 productElement.className = 'product';
                 productElement.innerHTML = `
-                    <img src="${product.Photo}" alt="${product.Product}" width="100" height="100">
+                    <img src="${product.Photo}" alt="${product.Product}" onerror="this.src='https://via.placeholder.com/100x100?text=Нет+фото'">
                     <div class="name">${product.Product}</div>
                     <div class="price-button">
                         <span class="promotional-price">${product["Promotional.price"]} ₽</span>
@@ -425,10 +425,16 @@
             document.getElementById('productDetail').style.display = 'block';
             
             document.getElementById('detailImage').src = product.Photo;
+            document.getElementById('detailImage').onerror = function() {
+                this.src = 'https://via.placeholder.com/180x180?text=Нет+фото';
+            };
             document.getElementById('detailName').textContent = product.Product;
             document.getElementById('shortDescription').textContent = product.Description;
             
             document.getElementById('detailMaxImage').src = product["Max.Photo"];
+            document.getElementById('detailMaxImage').onerror = function() {
+                this.src = 'https://via.placeholder.com/180x180?text=Нет+фото';
+            };
             document.getElementById('fullDescription').textContent = product["Max.Description"];
 
             const productOptions = document.getElementById('productOptions');
@@ -444,10 +450,10 @@
                     <td>${p.Weight}</td>
                     <td>${p.Type}</td>
                     <td>
-                        <span style="text-decoration: line-through;">${p.Price} ₽</span><br>
-                        <strong>${p["Promotional.price"]} ₽</strong>
+                        <span style="text-decoration: line-through;">${p.Price} ₽</span>
+                        <strong>${p["Promotional.price"]} ₽</strong><br>
+                        <button class="buy-button" onclick="addToCart('${p.Product}', '${p["Promotional.price"]}')">Купить</button>
                     </td>
-                    <td><button class="buy-button" onclick="addToCart('${p.Product}', '${p["Promotional.price"]}')">Купить</button></td>
                 `;
                 productOptions.appendChild(tr);
             });
