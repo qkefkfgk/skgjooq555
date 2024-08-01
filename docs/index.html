@@ -1,4 +1,4 @@
-<html><head><base href="https://websim.host"></head><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -41,13 +41,19 @@
             font-weight: 600;
             margin: 0;
         }
+        .stats {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
         .rating {
             font-size: 1em;
             color: #ffc107;
-            margin: 5px 0;
+            margin-right: 15px;
         }
         .sales {
-            font-size: 0.8em;
+            font-size: 0.9em;
             color: #6c757d;
         }
         .filters {
@@ -57,21 +63,56 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 15px;
         }
-        select {
+        .city-dropdown {
+            position: relative;
+            width: 100%;
+        }
+        .city-select {
+            width: 100%;
             padding: 10px;
             border-radius: 8px;
             border: 1px solid #ced4da;
             font-size: 16px;
             background-color: #fff;
-            width: 100%;
-            margin-bottom: 10px;
+            cursor: pointer;
+            appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23131313%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px top 50%;
-            background-size: 12px auto;
+        }
+        .city-select:after {
+            content: '\25BC';
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+        }
+        .city-list {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ced4da;
+            border-radius: 0 0 8px 8px;
+            background-color: #fff;
+            z-index: 1000;
+        }
+        .city-search {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 1px solid #ced4da;
+            font-size: 16px;
+        }
+        .city-item {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .city-item:hover {
+            background-color: #f8f9fa;
         }
         .products {
             display: grid;
@@ -142,6 +183,7 @@
             background-color: #f0f2f5;
             overflow-y: auto;
             z-index: 1000;
+            padding: 15px;
         }
         .product-image {
             width: 100%;
@@ -159,17 +201,6 @@
             font-size: 0.9em;
             color: #6c757d;
             margin-bottom: 15px;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            max-height: 3.2em;
-        }
-        .product-description.expanded {
-            max-height: 1000px;
-        }
-        .read-more {
-            color: #007bff;
-            cursor: pointer;
-            font-weight: 500;
         }
         .products-table {
             width: 100%;
@@ -193,7 +224,7 @@
         .products-table tr:last-child td {
             border-bottom: none;
         }
-        .buy-button {
+        .buy-button, .more-button {
             background-color: #007bff;
             color: white;
             border: none;
@@ -201,8 +232,9 @@
             border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.3s;
+            font-size: 0.9em;
         }
-        .buy-button:hover {
+        .buy-button:hover, .more-button:hover {
             background-color: #0056b3;
         }
         .back-button {
@@ -218,34 +250,33 @@
         .back-button:hover {
             background-color: #5a6268;
         }
+        .product-details {
+            display: none;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container" id="mainContainer">
         <div class="header">
             <h1>МАГАЗИН НАХОДОК</h1>
-            <div class="rating">
-                <span>4.99</span>
-                <span>★★★★★</span>
+            <div class="stats">
+                <div class="rating">
+                    <span>4.99</span>
+                    <span>★★★★★</span>
+                </div>
+                <div class="sales">ПРОДАЖ: 12483</div>
             </div>
-            <div class="sales">ПРОДАЖ: 12483</div>
         </div>
 
         <div class="filters">
-            <select id="cityFilter">
-                <option value="">Выберите город</option>
-                <option value="moscow">Москва</option>
-                <option value="stpetersburg">Санкт-Петербург</option>
-                <option value="novosibirsk">Новосибирск</option>
-                <option value="yekaterinburg">Екатеринбург</option>
-            </select>
-            <select id="productFilter">
-                <option value="">Выберите категорию</option>
-                <option value="electronics">Электроника</option>
-                <option value="clothing">Одежда</option>
-                <option value="home">Товары для дома</option>
-                <option value="books">Книги</option>
-            </select>
+            <div class="city-dropdown">
+                <div class="city-select" id="citySelect">Выберите город</div>
+                <div class="city-list" id="cityList">
+                    <input type="text" class="city-search" id="citySearch" placeholder="Поиск города">
+                    <div id="cityItems"></div>
+                </div>
+            </div>
         </div>
 
         <div class="products" id="productList">
@@ -257,11 +288,12 @@
         <button class="back-button" onclick="closeProductDetail()">Назад</button>
         <img src="" alt="Фото товара" class="product-image" id="detailImage">
         <div class="product-title" id="detailName"></div>
-        <div class="product-description" id="productDescription">
-            <span id="shortDescription"></span>
-            <span class="hidden-description" id="fullDescription" style="display: none;"></span>
+        <div class="product-description" id="shortDescription"></div>
+        <button class="more-button" onclick="toggleProductDetails()">Подробнее</button>
+        <div class="product-details" id="productDetails">
+            <img src="" alt="Подробное фото товара" class="product-image" id="detailMaxImage">
+            <div id="fullDescription"></div>
         </div>
-        <div class="read-more" id="readMoreBtn">Читать полностью</div>
 
         <table class="products-table">
             <thead>
@@ -286,64 +318,78 @@
     </div>
 
     <script>
-        const products = [
-            { id: 1, name: "Смартфон X1000", price: 29999, category: "electronics", image: "https://websim.host/phone.svg", unit: "шт", description: "Новейший смартфон с передовыми технологиями. Оснащен мощным процессором, высококачественной камерой и длительным временем работы от батареи." },
-            { id: 2, name: "Стильная куртка", price: 5999, category: "clothing", image: "https://websim.host/jacket.svg", unit: "шт", description: "Модная куртка из высококачественных материалов. Идеально подходит для прохладной погоды, имеет стильный дизайн и множество функциональных карманов." },
-            { id: 3, name: "Умная колонка", price: 7999, category: "electronics", image: "https://websim.host/speaker.svg", unit: "шт", description: "Интеллектуальная колонка с голосовым помощником. Воспроизводит музыку, отвечает на вопросы и управляет умным домом." },
-            { id: 4, name: "Кухонный комбайн", price: 12999, category: "home", image: "https://websim.host/mixer.svg", unit: "шт", description: "Многофункциональный кухонный комбайн для приготовления разнообразных блюд. Имеет множество насадок и режимов работы." },
-            { id: 5, name: "Бестселлер года", price: 799, category: "books", image: "https://websim.host/book.svg", unit: "шт", description: "Популярная книга, ставшая бестселлером этого года. Увлекательный сюжет и глубокие персонажи не оставят равнодушным ни одного читателя." },
-            { id: 6, name: "Беспроводные наушники", price: 4999, category: "electronics", image: "https://websim.host/headphones.svg", unit: "шт", description: "Высококачественные беспроводные наушники с активным шумоподавлением. Обеспечивают чистый звук и комфортное ношение в течение длительного времени." }
+        const cities = [
+            "Адлер", "Азов", "Аксай", "Анапа", "Ангарск", "Армавир", "Афипский", "Ачинск", "Астрахань", "Балаково",
+            "Батайск", "Белореченск", "Биробиджан", "Благовещенск", "Братск", "Валуйки", "Владикавказ", "Волгодонск",
+            "Волжский", "Вологда", "Воронеж", "Гданьск", "Геленджик", "Дербент", "Динская", "Донецк", "Ейск",
+            "Екатеринбург", "Екатерининская", "Иноземцево", "Иркутск", "Ивановская", "Избербаш", "Казань",
+            "Калининград", "Каспийск", "Кемерово", "Керчь", "Кизляр", "Колпино", "Копейск", "Кострома", "Краснодар",
+            "Красный Сулин", "Кущёвская", "Луганск", "Махачкала", "Минусинск", "Михайловск", "Моздок", "Москва",
+            "Назрань", "Нальчик", "Невинномысск", "Нижнеудинск", "Новая Адыгея", "Новороссийск", "Новосибирск",
+            "Новочеркасск", "Омск", "Оренбург", "Пермь", "Прохладный", "Пятигорск", "Ростов", "Ростов-на-Дону",
+            "Салехард", "Сальск", "Самара", "Санкт-Петербург", "Саранск", "Саратов", "Светлоград", "Симферополь",
+            "Славянск-на-Кубани", "Сочи", "Ставрополь", "Стерлитамак", "Старомарьевка", "Сызрань", "Таганрог",
+            "Тамбов", "Тверь", "Тимашевск", "Тихорецк", "Томск", "Троицкая", "Туапсе", "Тюмень", "Улан-Удэ", "Урай",
+            "Усолье-Сибирское", "Усть-Илимск", "Устье", "Уфа", "Хасавюрт", "Хвалынск", "Хомутово", "Челябинск",
+            "Черемхово", "Черкесск", "Чита", "Чунский", "Шахты", "Шахтёрск", "Якутск", "Ярославль"
         ];
 
-        function displayProducts(filteredProducts = products) {
+        let allProducts = [];
+
+        function displayProducts(products) {
             const productList = document.getElementById('productList');
             productList.innerHTML = '';
 
-            filteredProducts.forEach(product => {
+            products.forEach(product => {
                 const productElement = document.createElement('div');
                 productElement.className = 'product';
                 productElement.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}" width="100" height="100">
-                    <div class="name">${product.name}</div>
-                    <div class="price">${product.price} ₽</div>
-                    <div class="price-per-unit">${product.price} ₽ / ${product.unit}</div>
+                    <img src="${product.Photo}" alt="${product.Product}" width="100" height="100">
+                    <div class="name">${product.Product}</div>
+                    <div class="price">${product.Price} ₽</div>
+                    <div class="price-per-unit">${product.Price} ₽ / ${product.Weight}</div>
                 `;
                 productElement.addEventListener('click', () => showProductDetail(product));
                 productList.appendChild(productElement);
             });
         }
 
-        function filterProducts() {
-            const category = document.getElementById('productFilter').value;
-            const filteredProducts = category
-                ? products.filter(product => product.category === category)
-                : products;
-            displayProducts(filteredProducts);
-        }
-
         function showProductDetail(product) {
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('productDetail').style.display = 'block';
             
-            document.getElementById('detailImage').src = product.image;
-            document.getElementById('detailName').textContent = product.name;
+            document.getElementById('detailImage').src = product.Photo;
+            document.getElementById('detailName').textContent = product.Product;
+            document.getElementById('shortDescription').textContent = product.Description;
             
-            const shortDesc = product.description.split('. ')[0] + '.';
-            document.getElementById('shortDescription').textContent = shortDesc;
-            document.getElementById('fullDescription').textContent = product.description.substring(shortDesc.length);
+            document.getElementById('detailMaxImage').src = product["Max.Photo"];
+            document.getElementById('fullDescription').textContent = product["Max.Description"];
 
             const productOptions = document.getElementById('productOptions');
             productOptions.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>Москва</td>
-                    <td>2 шт</td>
-                    <td>Пункт выдачи</td>
-                    <td>${product.price} ₽</td>
-                    <td><button class="buy-button">Купить</button></td>
-                `;
-                productOptions.appendChild(tr);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${product.City} / ${product.District}<br><span style="font-size: 0.8em; color: #6c757d;">${product.Note}</span></td>
+                <td>${product.Weight}</td>
+                <td>${product.Type}</td>
+                <td>${product.Price} ₽</td>
+                <td><button class="buy-button">Купить</button></td>
+            `;
+            productOptions.appendChild(tr);
+
+            // Hide product details initially
+            document.getElementById('productDetails').style.display = 'none';
+        }
+
+        function toggleProductDetails() {
+            const detailsElement = document.getElementById('productDetails');
+            const moreButton = document.querySelector('.more-button');
+            if (detailsElement.style.display === 'none') {
+                detailsElement.style.display = 'block';
+                moreButton.textContent = 'Скрыть';
+            } else {
+                detailsElement.style.display = 'none';
+                moreButton.textContent = 'Подробнее';
             }
         }
 
@@ -352,32 +398,69 @@
             document.getElementById('productDetail').style.display = 'none';
         }
 
-        document.getElementById('productFilter').addEventListener('change', filterProducts);
+        function initCityDropdown() {
+            const citySelect = document.getElementById('citySelect');
+            const cityList = document.getElementById('cityList');
+            const citySearch = document.getElementById('citySearch');
+            const cityItems = document.getElementById('cityItems');
 
-        // Initialize with all products
-        displayProducts();
+            function updateCityList(filteredCities) {
+                cityItems.innerHTML = '';
+                filteredCities.forEach(city => {
+                    const cityItem = document.createElement('div');
+                    cityItem.className = 'city-item';
+                    cityItem.textContent = city;
+                    cityItem.addEventListener('click', () => {
+                        citySelect.textContent = city;
+                        cityList.style.display = 'none';
+                        filterProductsByCity(city);
+                    });
+                    cityItems.appendChild(cityItem);
+                });
+            }
+
+            citySelect.addEventListener('click', () => {
+                cityList.style.display = cityList.style.display === 'block' ? 'none' : 'block';
+            });
+
+            citySearch.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const filteredCities = cities.filter(city => 
+                    city.toLowerCase().includes(searchTerm)
+                );
+                updateCityList(filteredCities);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!citySelect.contains(e.target) && !cityList.contains(e.target)) {
+                    cityList.style.display = 'none';
+                }
+            });
+
+            updateCityList(cities);
+        }
+
+        function filterProductsByCity(city) {
+            const filteredProducts = allProducts.filter(product => product.City === city);
+            displayProducts(filteredProducts);
+        }
+
+        // Fetch products from JSON file
+        fetch('https://qkefkfgk.github.io/999999qwfqgwqwg/data.json')
+            .then(response => response.json())
+            .then(data => {
+                allProducts = data;
+                // Don't display products initially
+                document.getElementById('productList').innerHTML = '<p>Пожалуйста, выберите город для просмотра товаров.</p>';
+            })
+            .catch(error => console.error('Error:', error));
+
+        initCityDropdown();
 
         // Footer icon interactions
         document.getElementById('cartIcon').addEventListener('click', () => alert('Корзина пока пуста'));
         document.getElementById('profileIcon').addEventListener('click', () => alert('Профиль пользователя'));
         document.getElementById('chatIcon').addEventListener('click', () => alert('Чат поддержки'));
-
-        // Read More functionality
-        const descriptionEl = document.getElementById('productDescription');
-        const readMoreBtn = document.getElementById('readMoreBtn');
-        const fullDescription = document.getElementById('fullDescription');
-
-        readMoreBtn.addEventListener('click', () => {
-            if (descriptionEl.classList.contains('expanded')) {
-                descriptionEl.classList.remove('expanded');
-                fullDescription.style.display = 'none';
-                readMoreBtn.textContent = 'Читать полностью';
-            } else {
-                descriptionEl.classList.add('expanded');
-                fullDescription.style.display = 'inline';
-                readMoreBtn.textContent = 'Свернуть';
-            }
-        });
     </script>
 </body>
 </html>
