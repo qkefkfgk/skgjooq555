@@ -421,12 +421,12 @@
 
     <div class="product-detail" id="productDetail">
         <button class="back-button" onclick="closeProductDetail()">Назад</button>
-        <img src="" alt="Фото товара" class="product-image" id="detailImage">
+        <img src="" alt="Фото товара" class="product-image" id="detailImage" onload="imageLoaded(this)" onerror="this.onerror=null; this.src='https://via.placeholder.com/180x180?text=Нет+фото';">
         <div class="product-title" id="detailName"></div>
         <div class="product-description" id="shortDescription"></div>
         <button class="more-button" onclick="toggleProductDetails()">Подробнее</button>
         <div class="product-details" id="productDetails">
-            <img src="" alt="Подробное фото товара" class="product-image" id="detailMaxImage">
+            <img src="" alt="Подробное фото товара" class="product-image" id="detailMaxImage" onload="imageLoaded(this)" onerror="this.onerror=null; this.src='https://via.placeholder.com/180x180?text=Нет+подробного+фото';">
             <div id="fullDescription"></div>
         </div>
 
@@ -448,7 +448,7 @@
     <div class="order-confirmation" id="orderConfirmation">
         <h1>Подтверждение заказа</h1>
         <div class="order-item">
-            <img src="" alt="Фото товара" id="confirmationImage">
+            <img src="" alt="Фото товара" id="confirmationImage" onload="imageLoaded(this)" onerror="this.onerror=null; this.src='https://via.placeholder.com/150x150?text=Нет+фото';">
             <h2 id="confirmationName"></h2>
             <div class="order-details">
                 <p><strong>Локация:</strong> <span id="confirmationLocation"></span></p>
@@ -530,7 +530,7 @@
                 const productElement = document.createElement('div');
                 productElement.className = 'product';
                 productElement.innerHTML = `
-                    <img src="${product.Photo}" alt="${product.Product}" onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100?text=Нет+фото';">
+                    <img src="${product.Photo}" alt="${product.Product}" onload="imageLoaded(this)" onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100?text=Нет+фото';">
                     <div class="name">${product.Product}</div>
                     <div class="price-button">
                         <span class="promotional-price">${product["Promotional.price"]} ₽</span>
@@ -548,18 +548,10 @@
             document.getElementById('productDetail').style.display = 'block';
             
             document.getElementById('detailImage').src = product.Photo;
-            document.getElementById('detailImage').onerror = function() {
-                this.onerror = null;
-                this.src = 'https://via.placeholder.com/180x180?text=Нет+фото';
-            };
             document.getElementById('detailName').textContent = product.Product;
             document.getElementById('shortDescription').textContent = product.Description;
             
             document.getElementById('detailMaxImage').src = product["Max.Photo"];
-            document.getElementById('detailMaxImage').onerror = function() {
-                this.onerror = null;
-                this.src = 'https://via.placeholder.com/180x180?text=Нет+подробного+фото';
-            };
             document.getElementById('fullDescription').textContent = product["Max.Description"];
 
             const productOptions = document.getElementById('productOptions');
@@ -592,10 +584,6 @@
             document.getElementById('orderConfirmation').style.display = 'block';
 
             document.getElementById('confirmationImage').src = photo;
-            document.getElementById('confirmationImage').onerror = function() {
-                this.onerror = null;
-                this.src = 'https://via.placeholder.com/150x150?text=Нет+фото';
-            };
             document.getElementById('confirmationName').textContent = product;
             document.getElementById('confirmationLocation').textContent = `${city} / ${district}`;
             document.getElementById('confirmationWeight').textContent = weight;
@@ -685,6 +673,11 @@
             }, 3000);
         }
 
+        function imageLoaded(img) {
+            // Действия по загрузке изображения
+            console.log('Image loaded:', img.src);
+        }
+
         // Fetch products from JSON file
         fetch('https://qkefkfgk.github.io/999999qwfqgwqwg/data.json')
             .then(response => response.json())
@@ -708,4 +701,4 @@
     </script>
 </body>
 </html>
-</html>
+</body></html>
