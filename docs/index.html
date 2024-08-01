@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Онлайн Магазин</title>
+    <title>Онлайн Магазин - Мобильная Версия</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -26,6 +26,7 @@
         .container {
             max-width: 100%;
             padding: 10px;
+            padding-bottom: 70px;
         }
         .header {
             background-color: #ffffff;
@@ -181,6 +182,7 @@
             bottom: 0;
             left: 0;
             right: 0;
+            z-index: 1001;
         }
         .footer .icon {
             font-size: 1.2em;
@@ -200,13 +202,13 @@
         .footer .icon:active {
             color: #3498db;
         }
-        .product-detail {
+        .product-detail, .order-confirmation {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
+            bottom: 70px;
             background-color: #f0f2f5;
             overflow-y: auto;
             z-index: 1000;
@@ -252,19 +254,19 @@
         .products-table tr:last-child td {
             border-bottom: none;
         }
-        .buy-button {
+        .buy-button, .confirm-order-button {
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 6px 10px;
+            padding: 10px 15px;
             border-radius: 20px;
             cursor: pointer;
             transition: background-color 0.3s;
-            font-size: 0.8em;
-            margin-top: 5px;
+            font-size: 0.9em;
             width: 100%;
+            margin-top: 10px;
         }
-        .buy-button:hover {
+        .buy-button:hover, .confirm-order-button:hover {
             background-color: #0056b3;
         }
         .back-button {
@@ -299,6 +301,93 @@
         }
         .more-button:hover {
             background-color: #218838;
+        }
+        .order-confirmation {
+            padding: 20px;
+        }
+        .order-item {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .order-item img {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .order-details {
+            font-size: 0.9em;
+        }
+        .order-details strong {
+            font-weight: 600;
+        }
+        .order-total {
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+        }
+        .promocode-form {
+            margin-top: 20px;
+        }
+        .promocode-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .apply-promocode {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.9em;
+            width: 100%;
+        }
+        .apply-promocode:hover {
+            background-color: #5a6268;
+        }
+        .payment-options {
+            margin-top: 30px;
+        }
+        .payment-option {
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .payment-option:hover {
+            box-shadow: 0 0 0 2px #007bff;
+        }
+        .error-message {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff4136;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1002;
+            text-align: center;
+            font-weight: bold;
+        }
+        .error-message i {
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -345,8 +434,8 @@
             <thead>
                 <tr>
                     <th>Локация</th>
-                    <th>Вес/Шт.</th>
-                    <th>Тип</th>
+                    <th>Вес / кол-во</th>
+                    <th>Тип клада</th>
                     <th>Цена</th>
                 </tr>
             </thead>
@@ -356,9 +445,39 @@
         </table>
     </div>
 
+    <div class="order-confirmation" id="orderConfirmation">
+        <h1>Подтверждение заказа</h1>
+        <div class="order-item">
+            <img src="" alt="Фото товара" id="confirmationImage">
+            <h2 id="confirmationName"></h2>
+            <div class="order-details">
+                <p><strong>Локация:</strong> <span id="confirmationLocation"></span></p>
+                <p><strong>Вес / Кол-во:</strong> <span id="confirmationWeight"></span></p>
+                <p><strong>Тип клада:</strong> <span id="confirmationType"></span></p>
+            </div>
+            <div class="order-total">
+                <p>Итого: <span id="confirmationPrice"></span> ₽</p>
+            </div>
+        </div>
+        <form class="promocode-form">
+            <input type="text" class="promocode-input" placeholder="Промокод" id="promocodeInput">
+            <button type="button" class="apply-promocode" onclick="applyPromocode()">Применить</button>
+        </form>
+        <button class="confirm-order-button" onclick="confirmOrder()">Подтвердить заказ</button>
+        <div class="payment-options">
+            <h2>Пополнить счет</h2>
+            <div class="payment-option" onclick="alert('Переход к оплате картой')">
+                Автоматически через карту (19%)
+            </div>
+            <div class="payment-option" onclick="alert('Переход к оплате биткойном')">
+                Пополнение с помощью биткойна
+            </div>
+        </div>
+    </div>
+
     <div class="footer">
-        <div class="icon" id="cartIcon">
-            <i class="fas fa-shopping-cart"></i>
+        <div class="icon" id="productsIcon">
+            <i class="fas fa-box"></i>
             <span>Товары</span>
         </div>
         <div class="icon" id="profileIcon">
@@ -367,8 +486,13 @@
         </div>
         <div class="icon" id="chatIcon">
             <i class="fas fa-comments"></i>
-            <span>Чат поддержки</span>
+            <span>Чат</span>
         </div>
+    </div>
+
+    <div class="error-message" id="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="errorText"></span>
     </div>
 
     <script>
@@ -406,11 +530,12 @@
                 const productElement = document.createElement('div');
                 productElement.className = 'product';
                 productElement.innerHTML = `
-                    <img src="${product.Photo}" alt="${product.Product}" onerror="this.src='https://via.placeholder.com/100x100?text=Нет+фото'">
+                    <img src="${product.Photo}" alt="${product.Product}" onerror="this.onerror=null; this.src='https://via.placeholder.com/100x100?text=Нет+фото';">
                     <div class="name">${product.Product}</div>
                     <div class="price-button">
                         <span class="promotional-price">${product["Promotional.price"]} ₽</span>
-                        <span class="original-price">от ${product.Price} ₽ / ${product.Weight}</span>
+                        <span class="original-price">${product.Price} ₽</span>
+                        <span class="price-per-unit">от ${product.Price} ₽ / ${product.Weight}</span>
                     </div>
                 `;
                 productElement.addEventListener('click', () => showProductDetail(product));
@@ -424,6 +549,7 @@
             
             document.getElementById('detailImage').src = product.Photo;
             document.getElementById('detailImage').onerror = function() {
+                this.onerror = null;
                 this.src = 'https://via.placeholder.com/180x180?text=Нет+фото';
             };
             document.getElementById('detailName').textContent = product.Product;
@@ -431,6 +557,7 @@
             
             document.getElementById('detailMaxImage').src = product["Max.Photo"];
             document.getElementById('detailMaxImage').onerror = function() {
+                this.onerror = null;
                 this.src = 'https://via.placeholder.com/180x180?text=Нет+подробного+фото';
             };
             document.getElementById('fullDescription').textContent = product["Max.Description"];
@@ -444,13 +571,13 @@
             sameTypeProducts.forEach(p => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${p.City} / ${p.District}<br><span style="font-size: 0.8em; color: #6c757d;">${p.Note}</span></td>
+                    <td><strong>${p.City}</strong> / ${p.District}<br><span style="font-size: 0.8em; color: #6c757d;">${p.Note}</span></td>
                     <td>${p.Weight}</td>
                     <td>${p.Type}</td>
                     <td>
                         <span style="text-decoration: line-through;">${p.Price} ₽</span>
                         <strong>${p["Promotional.price"]} ₽</strong><br>
-                        <button class="buy-button" onclick="addToCart('${p.Product}', '${p["Promotional.price"]}')">Купить</button>
+                        <button class="buy-button" onclick="showOrderConfirmation('${p.Product}', '${p["Promotional.price"]}', '${p.City}', '${p.District}', '${p.Weight}', '${p.Type}', '${p.Photo}')">Купить</button>
                     </td>
                 `;
                 productOptions.appendChild(tr);
@@ -458,6 +585,22 @@
 
             // Hide product details initially
             document.getElementById('productDetails').style.display = 'none';
+        }
+
+        function showOrderConfirmation(product, price, city, district, weight, type, photo) {
+            document.getElementById('productDetail').style.display = 'none';
+            document.getElementById('orderConfirmation').style.display = 'block';
+
+            document.getElementById('confirmationImage').src = photo;
+            document.getElementById('confirmationImage').onerror = function() {
+                this.onerror = null;
+                this.src = 'https://via.placeholder.com/150x150?text=Нет+фото';
+            };
+            document.getElementById('confirmationName').textContent = product;
+            document.getElementById('confirmationLocation').textContent = `${city} / ${district}`;
+            document.getElementById('confirmationWeight').textContent = weight;
+            document.getElementById('confirmationType').textContent = type;
+            document.getElementById('confirmationPrice').textContent = price;
         }
 
         function toggleProductDetails() {
@@ -524,8 +667,22 @@
             displayProducts(filteredProducts);
         }
 
-        function addToCart(product, price) {
-            alert(`Товар "${product}" по цене ${price} ₽ добавлен в корзину`);
+        function confirmOrder() {
+            showError("ОШИБКА: НЕДОСТАТОЧНО СРЕДСТВ");
+        }
+
+        function applyPromocode() {
+            showError("ОШИБКА: ПРОМОКОД НЕДЕЙСТВИТЕЛЬНЫЙ");
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 3000);
         }
 
         // Fetch products from JSON file
@@ -541,7 +698,11 @@
         initCityDropdown();
 
         // Footer icon interactions
-        document.getElementById('cartIcon').addEventListener('click', () => alert('Корзина пока пуста'));
+        document.getElementById('productsIcon').addEventListener('click', () => {
+            document.getElementById('mainContainer').style.display = 'block';
+            document.getElementById('productDetail').style.display = 'none';
+            document.getElementById('orderConfirmation').style.display = 'none';
+        });
         document.getElementById('profileIcon').addEventListener('click', () => alert('Профиль пользователя'));
         document.getElementById('chatIcon').addEventListener('click', () => alert('Чат поддержки'));
     </script>
