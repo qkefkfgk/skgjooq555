@@ -434,8 +434,8 @@
             <thead>
                 <tr>
                     <th>Локация</th>
-                    <th>Вес / кол-во</th>
-                    <th>Тип клада</th>
+                    <th>Вес/Шт</th>
+                    <th>Тип</th>
                     <th>Цена</th>
                 </tr>
             </thead>
@@ -452,8 +452,8 @@
             <h2 id="confirmationName"></h2>
             <div class="order-details">
                 <p><strong>Локация:</strong> <span id="confirmationLocation"></span></p>
-                <p><strong>Вес / Кол-во:</strong> <span id="confirmationWeight"></span></p>
-                <p><strong>Тип клада:</strong> <span id="confirmationType"></span></p>
+                <p><strong>Вес/Шт:</strong> <span id="confirmationWeight"></span></p>
+                <p><strong>Тип:</strong> <span id="confirmationType"></span></p>
             </div>
             <div class="order-total">
                 <p>Итого: <span id="confirmationPrice"></span> ₽</p>
@@ -470,7 +470,7 @@
                 Автоматически через карту (19%)
             </div>
             <div class="payment-option" onclick="alert('Переход к оплате биткойном')">
-                Пополнение с помощью биткойна
+                Пополнение с помощью криптовалюты
             </div>
         </div>
     </div>
@@ -668,11 +668,11 @@
         }
 
         function confirmOrder() {
-            showError("ОШИБКА: НЕДОСТАТОЧНО СРЕДСТВ");
+            showError("Ошибка. Недостаточно средств");
         }
 
         function applyPromocode() {
-            showError("ОШИБКА: ПРОМОКОД НЕДЕЙСТВИТЕЛЬНЫЙ");
+            showError("Ошибка. Промокод недействительный");
         }
 
         function showError(message) {
