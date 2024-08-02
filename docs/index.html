@@ -136,13 +136,6 @@
         .product:active {
             transform: scale(0.98);
         }
-        .product img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
         .product .name {
             font-size: 0.9em;
             font-weight: 500;
@@ -158,19 +151,13 @@
             flex-direction: column;
             align-items: center;
         }
-        .product .promotional-price {
+        .product .promotional-price, .product .price-per-unit {
             font-size: 0.9em;
             color: #000;
             font-weight: 600;
         }
-        .product .original-price {
-            font-size: 0.8em;
-            color: #6c757d;
+        .product .price-per-unit .original-price {
             text-decoration: line-through;
-        }
-        .product .price-per-unit {
-            font-size: 0.7em;
-            color: #6c757d;
         }
         .footer {
             background-color: #ffffff;
@@ -215,22 +202,16 @@
             z-index: 1000;
             padding: 10px;
         }
-        .product-image {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
         .product-title {
             font-size: 1.1em;
             font-weight: 600;
             margin-bottom: 10px;
         }
-        .product-description {
+        .product-description, #fullDescription {
             font-size: 0.9em;
             color: #6c757d;
             margin-bottom: 15px;
+            display: inline;
         }
         .products-table {
             width: 100%;
@@ -241,6 +222,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 15px;
             font-size: 0.9em;
+            margin-top: 20px;
         }
         .products-table th, .products-table td {
             padding: 10px;
@@ -255,7 +237,7 @@
         .products-table tr:last-child td {
             border-bottom: none;
         }
-        .buy-button, .confirm-order-button {
+        .buy-button, .confirm-order-button, .preorder-button {
             background-color: #007bff;
             color: white;
             border: none;
@@ -267,41 +249,27 @@
             width: 100%;
             margin-top: 10px;
         }
-        .buy-button:hover, .confirm-order-button:hover {
+        .buy-button:hover, .confirm-order-button:hover, .preorder-button:hover {
             background-color: #0056b3;
-        }
-        .back-button {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-bottom: 15px;
-            width: 100%;
-        }
-        .back-button:hover {
-            background-color: #5a6268;
         }
         .product-details {
             display: none;
             margin-top: 20px;
         }
         .more-button {
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
             border: none;
             padding: 8px 12px;
-            border-radius: 6px;
+            border-radius: 20px;
             cursor: pointer;
             transition: background-color 0.3s;
-            font-size: 0.9em;
-            width: 100%;
-            margin-top: 10px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-left: 10px;
         }
         .more-button:hover {
-            background-color: #218838;
+            background-color: #0056b3;
         }
         .order-confirmation {
             padding: 20px;
@@ -313,15 +281,12 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .order-item img {
-            width: 100%;
-            max-width: 150px;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
         .order-details {
             font-size: 0.9em;
+            line-height: 0.8;
+        }
+        .order-details p {
+            margin: 5px 0;
         }
         .order-details strong {
             font-weight: 600;
@@ -403,9 +368,70 @@
             border-radius: 8px;
             border: 1px solid #ced4da;
         }
-    </style>
-</head>
-<body>
+        .no-products-message {
+            background-color: #ffffff;
+            color: #333333;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: 500;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+        }
+        .products-table td .price-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .products-table td .promotional-price {
+            font-weight: bold;
+            color: #000;
+        }
+        .products-table td .original-price {
+            text-decoration: line-through;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        .products-table td .buy-button {
+            margin-top: 10px;
+        }
+        .loading-icon {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1003;
+        }
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+        }
+        .loading-spinner:before {
+            content: "";
+            box-sizing: border-box;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            margin-top: -20px;
+            margin-left: -20px;
+            border-radius: 50%;
+            border: 3px solid #007bff;
+            border-top-color: #ffffff;
+            animation: spinner 0.8s linear infinite;
+        }
+        @keyframes spinner {
+            to {transform: rotate(360deg);}
+        }
+    </style></head><body>
     <div class="container" id="mainContainer">
         <div class="header">
             <h1>МАГАЗИН НАХОДОК</h1>
@@ -428,24 +454,26 @@
             </div>
             <div class="select-city-message">
                 <i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i>
-                Выберите город для просмотра товаров
+                Пожалуйста, выберите город для просмотра товаров
             </div>
         </div>
 
         <div class="products" id="productList">
             <!-- Products will be dynamically added here -->
         </div>
+
+        <div class="no-products-message" id="noProductsMessage" style="display: none;">
+            <p>Нет доступных позиций</p>
+            <button class="preorder-button" onclick="preorderProducts()">Предзаказ</button>
+        </div>
     </div>
 
     <div class="product-detail" id="productDetail">
-        <button class="back-button" onclick="closeProductDetail()">Назад</button>
-        <img src="" alt="Фото товара" class="product-image" id="detailImage">
         <div class="product-title" id="detailName"></div>
         <div class="product-description" id="shortDescription"></div>
         <button class="more-button" onclick="toggleProductDetails()">Подробнее</button>
         <div class="product-details" id="productDetails">
-            <img src="" alt="Подробное фото товара" class="product-image" id="detailMaxImage">
-            <div id="fullDescription"></div>
+            <div id="fullDescription" class="product-description"></div>
         </div>
 
         <table class="products-table">
@@ -466,12 +494,12 @@
     <div class="order-confirmation" id="orderConfirmation">
         <h1>Подтверждение заказа</h1>
         <div class="order-item">
-            <img src="" alt="Фото товара" id="confirmationImage">
             <h2 id="confirmationName"></h2>
             <div class="order-details">
                 <p><strong>Локация:</strong> <span id="confirmationLocation"></span></p>
                 <p><strong>Вес/Шт:</strong> <span id="confirmationWeight"></span></p>
                 <p><strong>Тип:</strong> <span id="confirmationType"></span></p>
+                <p><strong>Примечание:</strong> <span id="confirmationNote"></span></p>
             </div>
             <div class="order-total">
                 <p>Итого: <span id="confirmationPrice"></span> ₽</p>
@@ -504,13 +532,17 @@
         </div>
         <div class="icon" id="chatIcon">
             <i class="fas fa-comments"></i>
-            <span>Чат</span>
+            <span>Отзывы</span>
         </div>
     </div>
 
     <div class="error-message" id="errorMessage">
         <i class="fas fa-exclamation-circle"></i>
         <span id="errorText"></span>
+    </div>
+
+    <div class="loading-icon" id="loadingIcon">
+        <div class="loading-spinner"></div>
     </div>
 
     <script>
@@ -532,22 +564,19 @@
 
         let allProducts = [];
 
-        function checkImage(url) {
-            return new Promise((resolve) => {
-                if (url.startsWith('https://gekkk.co/storage')) {
-                    resolve(url);
-                } else {
-                    const img = new Image();
-                    img.onload = () => resolve(url);
-                    img.onerror = () => resolve('https://via.placeholder.com/100x100?text=Нет+фото');
-                    img.src = url;
-                }
-            });
-        }
-
         async function displayProducts(products) {
             const productList = document.getElementById('productList');
+            const noProductsMessage = document.getElementById('noProductsMessage');
             productList.innerHTML = '';
+
+            if (products.length === 0) {
+                productList.style.display = 'none';
+                noProductsMessage.style.display = 'block';
+                return;
+            }
+
+            productList.style.display = 'grid';
+            noProductsMessage.style.display = 'none';
 
             const cheapestProducts = products.reduce((acc, product) => {
                 if (!acc[product.Product] || parseFloat(product.Price) < parseFloat(acc[product.Product].Price)) {
@@ -557,15 +586,13 @@
             }, {});
 
             for (const product of Object.values(cheapestProducts)) {
-                const imageUrl = await checkImage(product.Photo);
                 const productElement = document.createElement('div');
                 productElement.className = 'product';
                 productElement.innerHTML = `
-                    <img src="${imageUrl}" alt="${product.Product}" loading="lazy">
                     <div class="name">${product.Product}</div>
                     <div class="price-button">
                         <span class="promotional-price">${product["Promotional.price"]} ₽</span>
-                        <span class="price-per-unit">от ${product.Price} ₽ / ${product.Weight}</span>
+                        <span class="price-per-unit">от <span class="original-price">${product.Price}</span> ₽ / ${product.Weight}</span>
                     </div>
                 `;
                 productElement.addEventListener('click', () => showProductDetail(product));
@@ -573,18 +600,13 @@
             }
         }
 
-        async function showProductDetail(product) {
+        function showProductDetail(product) {
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('productDetail').style.display = 'block';
             
-            const detailImageUrl = await checkImage(product.Photo);
-            const detailMaxImageUrl = await checkImage(product["Max.Photo"]);
-            
-            document.getElementById('detailImage').src = detailImageUrl;
             document.getElementById('detailName').textContent = product.Product;
             document.getElementById('shortDescription').textContent = product.Description;
             
-            document.getElementById('detailMaxImage').src = detailMaxImageUrl;
             document.getElementById('fullDescription').textContent = product["Max.Description"];
 
             const productOptions = document.getElementById('productOptions');
@@ -599,9 +621,11 @@
                     <td>${p.Weight}</td>
                     <td>${p.Type}</td>
                     <td>
-                        <span style="text-decoration: line-through;">${p.Price} ₽</span>
-                        <strong>${p["Promotional.price"]} ₽</strong><br>
-                        <button class="buy-button" onclick="showOrderConfirmation('${p.Product}', '${p["Promotional.price"]}', '${p.City}', '${p.District}', '${p.Weight}', '${p.Type}', '${p.Photo}')">Купить</button>
+                        <div class="price-container">
+                            <span class="promotional-price">${p["Promotional.price"]} ₽</span>
+                            <span class="original-price">${p.Price} ₽</span>
+                            <button class="buy-button" onclick="showOrderConfirmation('${p.Product}', '${p["Promotional.price"]}', '${p.City}', '${p.District}', '${p.Weight}', '${p.Type}', '${p.Note}')">Купить</button>
+                        </div>
                     </td>
                 `;
                 productOptions.appendChild(tr);
@@ -610,16 +634,15 @@
             document.getElementById('productDetails').style.display = 'none';
         }
 
-        async function showOrderConfirmation(product, price, city, district, weight, type, photo) {
+        function showOrderConfirmation(product, price, city, district, weight, type, note) {
             document.getElementById('productDetail').style.display = 'none';
             document.getElementById('orderConfirmation').style.display = 'block';
 
-            const imageUrl = await checkImage(photo);
-            document.getElementById('confirmationImage').src = imageUrl;
             document.getElementById('confirmationName').textContent = product;
             document.getElementById('confirmationLocation').textContent = `${city} / ${district}`;
             document.getElementById('confirmationWeight').textContent = weight;
             document.getElementById('confirmationType').textContent = type;
+            document.getElementById('confirmationNote').textContent = note;
             document.getElementById('confirmationPrice').textContent = price;
         }
 
@@ -689,7 +712,13 @@
         }
 
         function confirmOrder() {
-            showError("Недостаточно средств");
+            const loadingIcon = document.getElementById('loadingIcon');
+            loadingIcon.style.display = 'flex';
+
+            setTimeout(() => {
+                loadingIcon.style.display = 'none';
+                showError("Недостаточно средств");
+            }, 2000);
         }
 
         function applyPromocode() {
@@ -704,6 +733,10 @@
             setTimeout(() => {
                 errorMessage.style.display = 'none';
             }, 3000);
+        }
+
+        function preorderProducts() {
+            alert("Функция предзаказа в разработке");
         }
 
         // Fetch products from JSON file
