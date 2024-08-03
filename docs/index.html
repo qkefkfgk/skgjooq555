@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <base href="https://qkefkfgk.github.io/999999qwfqgwqwg/data.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Онлайн Магазин - Мобильная Версия</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body oncontextmenu="return false;">
+    <div class="secure-connection">
+        <div class="shield">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="connection-status">
+            <i class="icon fas fa-check" style="opacity: 0; animation: 0.5s forwards fadeInCheck;"></i>
+        </div>
+        <span>Защищенное соединение TOR</span>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <div class="header">
+            <h1>МАГАЗИН НАХОДОК</h1>
+            <div class="stats">
+                <div class="rating">
+                    <span>4.99</span>
+                    <span>★★★★★</span>
+                </div>
+                <div class="sales">ПРОДАЖ: 12483</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="city-dropdown">
+                <div class="city-select" id="citySelect">Выберите город</div>
+                <div class="city-list" id="cityList">
+                    <input type="text" class="city-search" id="citySearch" placeholder="Поиск города">
+                    <div id="cityItems"></div>
+                </div>
+            </div>
+            <div class="select-city-message">
+                <i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i>
+                Пожалуйста, выберите город для просмотра товаров
+            </div>
+        </div>
+
+        <div class="products" id="productList">
+            <!-- Products will be dynamically added here -->
+        </div>
+
+        <div class="no-products-message" id="noProductsMessage" style="display: none;">
+            <p>Нет доступных позиций</p>
+            <button class="preorder-button" onclick="preorderProducts()">Предзаказ</button>
+        </div>
+    </div>
+
+    <div class="product-detail" id="productDetail">
+        <div class="product-title" id="detailName"></div>
+        <div class="product-description" id="shortDescription"></div>
+        <button class="more-button" onclick="toggleProductDetails()">Подробнее</button>
+        <div class="product-details" id="productDetails">
+            <div id="fullDescription" class="product-description"></div>
+        </div>
+
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>Локация</th>
+                    <th>Вес/Шт</th>
+                    <th>Тип</th>
+                    <th>Цена</th>
+                </tr>
+            </thead>
+            <tbody id="productOptions">
+                <!-- Product options will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-confirmation" id="orderConfirmation">
+        <h1>Подтверждение заказа</h1>
+        <div class="order-item">
+            <h2 id="confirmationName"></h2>
+            <div class="order-details">
+                <p><strong>Локация:</strong> <span id="confirmationLocation"></span></p>
+                <p><strong>Вес/Шт:</strong> <span id="confirmationWeight"></span></p>
+                <p><strong>Тип:</strong> <span id="confirmationType"></span></p>
+                <p><strong>Примечание:</strong> <span id="confirmationNote"></span></p>
+            </div>
+            <div class="order-total">
+                <p>Итого: <span id="confirmationPrice"></span> ₽</p>
+            </div>
+        </div>
+        <form class="promocode-form">
+            <input type="text" class="promocode-input" placeholder="Промокод" id="promocodeInput">
+            <button type="button" class="apply-promocode" onclick="applyPromocode()">Применить</button>
+        </form>
+        <button class="confirm-order-button" onclick="confirmOrder()">Подтвердить заказ</button>
+        <div class="payment-options">
+            <h2>Пополнить счет</h2>
+            <div class="payment-option" onclick="alert('Переход к оплате картой')">
+                Автоматически через карту (19%)
+            </div>
+            <div class="payment-option" onclick="alert('Переход к оплате биткойном')">
+                Пополнение с помощью криптовалюты
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="icon" id="productsIcon">
+            <i class="fas fa-box"></i>
+            <span>Товары</span>
+        </div>
+        <div class="icon" id="profileIcon">
+            <i class="fas fa-user"></i>
+            <span>Профиль</span>
+        </div>
+        <div class="icon" id="chatIcon">
+            <i class="fas fa-comments"></i>
+            <span>Отзывы</span>
+        </div>
+    </div>
+
+    <div class="error-message" id="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="errorText"></span>
+    </div>
+
+    <div class="loading-icon" id="loadingIcon">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
