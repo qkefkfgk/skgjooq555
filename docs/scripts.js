@@ -1,176 +1,121 @@
-body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
-}
+const cities = [
+    "Адлер", "Азов", "Аксай", "Анапа", "Ангарск", "Армавир", "Афипский", "Ачинск", "Астрахань", "Балаково",
+    "Батайск", "Белореченск", "Биробиджан", "Благовещенск", "Братск", "Валуйки", "Владикавказ", "Волгодонск",
+    "Волжский", "Вологда", "Воронеж", "Гданьск", "Геленджик", "Дербент", "Динская", "Донецк", "Ейск",
+    "Екатеринбург", "Екатерининская", "Иноземцево", "Иркутск", "Ивановская", "Избербаш", "Казань",
+    "Калининград", "Каспийск", "Кемерово", "Керчь", "Кизляр", "Колпино", "Копейск", "Кострома", "Краснодар",
+    "Красный Сулин", "Кущёвская", "Луганск", "Махачкала", "Минусинск", "Михайловск", "Моздок", "Москва",
+    "Назрань", "Нальчик", "Невинномысск", "Нижнеудинск", "Новая Адыгея", "Новороссийск", "Новосибирск",
+    "Новочеркасск", "Омск", "Оренбург", "Пермь", "Прохладный", "Пятигорск", "Ростов", "Ростов-на-Дону",
+    "Салехард", "Сальск", "Самара", "Санкт-Петербург", "Саранск", "Саратов", "Светлоград", "Симферополь",
+    "Славянск-на-Кубани", "Сочи", "Ставрополь", "Стерлитамак", "Старомарьевка", "Сызрань", "Таганрог",
+    "Тамбов", "Тверь", "Тимашевск", "Тихорецк", "Томск", "Троицкая", "Туапсе", "Тюмень", "Улан-Удэ", "Урай",
+    "Усолье-Сибирское", "Усть-Илимск", "Устье", "Уфа", "Хасавюрт", "Хвалынск", "Хомутово", "Челябинск",
+    "Череповец", "Шахты", "Элиста", "Энгельс", "Ярославль"
+];
 
-.secure-connection, .header, .filters, .products, .footer, .error-message, .loading-icon, .product-detail, .order-confirmation {
-    margin: 20px;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const citySelect = document.getElementById('citySelect');
+    const cityList = document.getElementById('cityList');
+    const cityItems = document.getElementById('cityItems');
+    const citySearch = document.getElementById('citySearch');
+    const productList = document.getElementById('productList');
+    const noProductsMessage = document.getElementById('noProductsMessage');
+    const productDetail = document.getElementById('productDetail');
+    const mainContainer = document.getElementById('mainContainer');
+    const loadingIcon = document.getElementById('loadingIcon');
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
 
-.secure-connection {
-    display: flex;
-    align-items: center;
-}
-
-.secure-connection .shield {
-    margin-right: 10px;
-}
-
-.header {
-    text-align: center;
-}
-
-.stats {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-}
-
-.filters {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.city-dropdown {
-    position: relative;
-}
-
-.city-select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-}
-
-.city-list {
-    position: absolute;
-    top: 40px;
-    width: 100%;
-    border: 1px solid #ccc;
-    background-color: white;
-    max-height: 200px;
-    overflow-y: auto;
-    display: none;
-    z-index: 1000;
-}
-
-.city-search {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid #ccc;
-}
-
-.city-item {
-    padding: 10px;
-    cursor: pointer;
-}
-
-.city-item:hover {
-    background-color: #f0f0f0;
-}
-
-.products {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.product-item {
-    padding: 10px;
-    border: 1px solid #ccc;
-    margin: 10px;
-    cursor: pointer;
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.no-products-message {
-    text-align: center;
-}
-
-.preorder-button {
-    padding: 10px 20px;
-    margin-top: 10px;
-    cursor: pointer;
-}
-
-.product-detail, .order-confirmation {
-    display: none;
-}
-
-.product-detail .product-title, .order-confirmation .order-item h2 {
-    font-size: 24px;
-    margin: 10px 0;
-}
-
-.product-detail .product-description, .order-confirmation .order-details p {
-    font-size: 18px;
-}
-
-.products-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-}
-
-.products-table th, .products-table td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-}
-
-.footer {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-
-.footer .icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-}
-
-.footer .icon i {
-    font-size: 24px;
-}
-
-.footer .icon span {
-    margin-top: 5px;
-}
-
-.error-message {
-    display: none;
-    background-color: red;
-    color: white;
-    padding: 10px;
-    text-align: center;
-    border-radius: 5px;
-}
-
-.loading-icon {
-    display: none;
-    text-align: center;
-}
-
-.loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #ccc;
-    border-top-color: #333;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
+    function toggleCityList() {
+        cityList.style.display = cityList.style.display === 'block' ? 'none' : 'block';
+        citySearch.value = '';
+        updateCityItems(cities);
     }
-    100% {
-        transform: rotate(360deg);
+
+    function updateCityItems(filteredCities) {
+        cityItems.innerHTML = '';
+        filteredCities.forEach(city => {
+            const div = document.createElement('div');
+            div.textContent = city;
+            div.classList.add('city-item');
+            div.onclick = () => selectCity(city);
+            cityItems.appendChild(div);
+        });
     }
-}
+
+    function selectCity(city) {
+        citySelect.textContent = city;
+        cityList.style.display = 'none';
+        fetchProducts(city);
+    }
+
+    function fetchProducts(city) {
+        loadingIcon.style.display = 'block';
+        fetch('https://qkefkfgk.github.io/999999qwfqgwqwg/data.json')
+            .then(response => response.json())
+            .then(data => {
+                loadingIcon.style.display = 'none';
+                const products = data[city];
+                if (products && products.length > 0) {
+                    productList.innerHTML = '';
+                    products.forEach(product => {
+                        const productDiv = document.createElement('div');
+                        productDiv.classList.add('product-item');
+                        productDiv.textContent = product.name;
+                        productDiv.onclick = () => showProductDetails(product);
+                        productList.appendChild(productDiv);
+                    });
+                    noProductsMessage.style.display = 'none';
+                } else {
+                    noProductsMessage.style.display = 'block';
+                    productList.innerHTML = '';
+                }
+            })
+            .catch(error => {
+                loadingIcon.style.display = 'none';
+                showError(`Ошибка загрузки товаров: ${error.message}`);
+            });
+    }
+
+    function showProductDetails(product) {
+        document.getElementById('detailName').textContent = product.name;
+        document.getElementById('shortDescription').textContent = product.shortDescription;
+        document.getElementById('fullDescription').textContent = product.fullDescription;
+
+        const productOptions = document.getElementById('productOptions');
+        productOptions.innerHTML = '';
+        product.options.forEach(option => {
+            const row = document.createElement('tr');
+            row.innerHTML = 
+                `<td>${option.location}</td>
+                <td>${option.weight}</td>
+                <td>${option.type}</td>
+                <td>${option.price} ₽</td>`;
+            productOptions.appendChild(row);
+        });
+
+        productDetail.style.display = 'block';
+        mainContainer.style.display = 'none';
+    }
+
+    function toggleProductDetails() {
+        const productDetails = document.getElementById('productDetails');
+        productDetails.style.display = productDetails.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function showError(message) {
+        errorMessage.style.display = 'block';
+        errorText.textContent = message;
+        setTimeout(() => {
+            errorMessage.style.display = 'none';
+        }, 5000);
+    }
+
+    citySelect.addEventListener('click', toggleCityList);
+    citySearch.addEventListener('input', () => {
+        const searchText = citySearch.value.toLowerCase();
+        const filteredCities = cities.filter(city => city.toLowerCase().includes(searchText));
+        updateCityItems(filteredCities);
+    });
+});
